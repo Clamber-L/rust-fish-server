@@ -1,9 +1,10 @@
 use axum::Router;
 use rust_fish_server::init_router;
+use shuttle_runtime::SecretStore;
 
 #[shuttle_runtime::main]
-async fn main() -> shuttle_axum::ShuttleAxum {
-    let secret = "mysql://root:Lsw%400516@47.95.179.146:3306/fish";
+async fn main(#[shuttle_runtime::Secrets] secrets: SecretStore) -> shuttle_axum::ShuttleAxum {
+    let secret = secrets.get("MYSQL_URL").expect("secret was not found");
     println!("config:{:?}", secret);
 
     let router: Router = init_router(&secret).await?;

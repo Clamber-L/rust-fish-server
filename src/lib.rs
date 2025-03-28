@@ -9,12 +9,9 @@ use app_state::AppState;
 use axum::{extract::State, routing::get, Router};
 use chrono::Utc;
 use core::*;
-use entity::{
-    mysql::{
-        fish_record::{self, Model},
-        prelude::FishRecord,
-    },
-    *,
+use entity::mysql::{
+    fish_record::{self, Model},
+    prelude::FishRecord,
 };
 pub use error::*;
 use sea_orm::{ActiveModelTrait, ActiveValue::Set, EntityTrait};
@@ -47,16 +44,6 @@ async fn fish_record(State(state): State<AppState>) -> ApiResult<Vec<Model>> {
 }
 
 async fn inset_record(State(state): State<AppState>) -> ApiResult<String> {
-    /**
-        FishRecord(
-      time: "上午 09:30",
-      type: "草鱼",
-      weight: "1.2kg",
-      bait: "玉米粒",
-      imageUrl: "https://cdn.pixabay.com/photo/2017/05/31/00/24/aquarium-2358739_1280.jpg",
-      address: "南湖水库",
-    ),
-    */
     let record = fish_record::ActiveModel {
         id: Set(generate_snowflake_id()?),
         weight: Set(Some("1.2".to_string())),
