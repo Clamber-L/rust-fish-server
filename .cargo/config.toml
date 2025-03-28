@@ -1,0 +1,11 @@
+[target.x86_64-pc-windows-msvc]
+rustflags = [
+    "-L",
+    "C:\\Program Files\\Npcap\\Lib\\x64",
+    "-C",
+    "link-arg=/DEFAULTLIB:wpcap.lib",
+    "-C",
+    "link-arg=/DEFAULTLIB:delayimp.lib",
+    "-C",
+    "link-arg=/DELAYLOAD:Packet.dll",
+]

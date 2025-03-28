@@ -1,0 +1,58 @@
+[package]
+name = "rust-fish-server"
+version = "0.1.0"
+edition = "2021"
+
+[profile.release]
+opt-level = 3
+
+[dependencies]
+shuttle-axum = "0.53.0"
+shuttle-runtime = "0.53.0"
+
+# error handler
+anyhow = "1.0.93"
+thiserror = "2"
+
+# serialize and deserialize
+serde = { version = "1.0.215", features = ["derive"] }
+serde_yaml = "0.9.33"
+serde_json = "1.0.133"
+
+# web
+axum = { version = "0.8.1", features = [
+    "http2",
+    "query",
+    "tracing",
+    "ws",
+    "macros",
+] }
+tower-http = { version = "0.6.2", features = ["cors"] }
+axum-extra = "0.10.0"
+
+# orm
+sea-orm = { version = "1.1.1", features = [
+    "sqlx-mysql",
+    "runtime-tokio-native-tls",
+    "macros",
+] }
+# ts-bind = "0.1.7"
+
+# async runtime
+tokio = { version = "1.28.2", features = ["rt", "rt-multi-thread", "macros"] }
+futures = "0.3.31"
+futures-util = "0.3.31"
+tokio-tungstenite = "0.26.1"
+tokio-util = "0.7.12"
+
+# log
+tracing = "0.1.40"
+tracing-subscriber = { version = "0.3.18", features = ["env-filter"] }
+
+# utils
+chrono = { version = "0.4.38", features = ["serde"] }
+derive_builder = "0.20.2"
+hmac = "0.12.1"
+jwt = "0.16.0"
+sha2 = "0.10.8"
+sonyflake = "0.3"
