@@ -7,6 +7,7 @@ use axum::{
     http::{header, StatusCode},
     response::IntoResponse,
 };
+use sea_orm::ColIdx;
 use thiserror::Error;
 use tracing::error;
 
