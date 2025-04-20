@@ -4,7 +4,7 @@ use sea_orm::entity::prelude::*;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, PartialEq, DeriveEntityModel, Eq, Serialize, Deserialize)]
-#[sea_orm(table_name = "fish_record")]
+#[sea_orm(table_name = "app_user")]
 #[serde(rename_all = "camelCase")]
 pub struct Model {
     #[sea_orm(primary_key, auto_increment = false)]
@@ -12,12 +12,6 @@ pub struct Model {
     pub id: String,
     pub created_time: Option<DateTime>,
     pub updated_time: Option<DateTime>,
-    pub weight: Option<String>,
-    pub harvest_time: Option<DateTime>,
-    pub bait: Option<String>,
-    pub image_url: Option<String>,
-    pub address: Option<String>,
-    pub fish_type: Option<String>,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]

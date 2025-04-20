@@ -2,4 +2,6 @@
 
 pub mod prelude;
 
+pub mod app_user;
 pub mod fish_record;
+pub mod sys_user;
