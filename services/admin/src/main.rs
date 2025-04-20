@@ -3,7 +3,6 @@ use anyhow::Result;
 use axum::{routing::get, serve, Router};
 use lib_core::mysql_pool;
 use tokio::net::TcpListener;
-use tower_http::cors::{Any, CorsLayer};
 use tracing::info;
 use tracing::metadata::LevelFilter;
 use tracing_subscriber::layer::SubscriberExt;
