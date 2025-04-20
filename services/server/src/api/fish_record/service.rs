@@ -1,12 +1,12 @@
 use crate::app_state::AppState;
-use crate::core::{generate_snowflake_id, ApiResult, ExtractJson, ExtractQuery};
-use crate::entity::mysql::fish_record;
-use crate::entity::mysql::fish_record::Model;
-use crate::entity::mysql::prelude::FishRecord;
-use crate::utils::result::request_entity::PageResult;
-use crate::utils::{ResData, ResMessage};
 use axum::extract::State;
 use chrono::Utc;
+use lib_core::{generate_snowflake_id, ApiResult, ExtractJson, ExtractQuery};
+use lib_entity::mysql::fish_record;
+use lib_entity::mysql::fish_record::Model;
+use lib_entity::mysql::prelude::FishRecord;
+use lib_utils::result::request_entity::PageResult;
+use lib_utils::{ResData, ResMessage};
 use sea_orm::{ActiveModelTrait, EntityTrait, PaginatorTrait, QueryOrder, Set};
 use serde::Deserialize;
 
@@ -19,7 +19,6 @@ pub async fn fish_record(State(state): State<AppState>) -> ApiResult<Vec<Model>>
     Ok(ResData::ok(result))
 }
 
-#[axum::debug_handler]
 pub async fn fish_record_by_page(
     State(state): State<AppState>,
     ExtractQuery(param): ExtractQuery<FishRecordPageParam>,
@@ -44,7 +43,6 @@ pub struct InsertParam {
     pub name: Option<String>,
 }
 
-#[axum::debug_handler]
 pub async fn inset_record(
     State(state): State<AppState>,
     ExtractJson(param): ExtractJson<InsertParam>,

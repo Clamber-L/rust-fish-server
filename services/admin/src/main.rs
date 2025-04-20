@@ -1,0 +1,25 @@
+use admin::init_router;
+use anyhow::Result;
+use axum::{routing::get, serve, Router};
+use lib_core::mysql_pool;
+use tokio::net::TcpListener;
+use tower_http::cors::{Any, CorsLayer};
+use tracing::info;
+use tracing::metadata::LevelFilter;
+use tracing_subscriber::layer::SubscriberExt;
+use tracing_subscriber::util::SubscriberInitExt;
+use tracing_subscriber::{fmt::Layer, Layer as _};
+
+#[tokio::main]
+async fn main() -> Result<()> {
+    let layer = Layer::new().with_filter(LevelFilter::INFO);
+    tracing_subscriber::registry().with(layer).init();
+
+    let addr = format!("0.0.0.0:{}", 8100);
+    let tcp_listener = TcpListener::bind(addr).await?;
+
+    info!("Server started on http://{}", tcp_listener.local_addr()?);
+
+    serve(tcp_listener, init_router().await?).await?;
+    Ok(())
+}

@@ -1,7 +1,5 @@
 use serde::Deserialize;
 
-use crate::utils::result::request_entity::Page;
-
 #[derive(Deserialize, Debug, Clone, Default)]
 pub struct FishRecordPageParam {
     #[serde(rename = "pageNum")]

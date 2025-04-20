@@ -1,12 +1,17 @@
-[package]
-name = "rust-fish-server"
-version = "0.1.0"
-edition = "2021"
+[workspace]
+resolver = "2"
+members = ["creates/lib-core", "creates/lib-entity", "creates/lib-utils",
+    "services/server", "services/admin"
+]
 
 [profile.release]
 opt-level = 3
 
-[dependencies]
+[workspace.dependencies]
+lib-core = { path = "creates/lib-core" }
+lib-entity = { path = "creates/lib-entity" }
+lib-utils = { path = "creates/lib-utils" }
+
 shuttle-axum = "0.53.0"
 shuttle-runtime = "0.53.0"
 

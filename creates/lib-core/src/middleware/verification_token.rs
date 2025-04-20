@@ -1,4 +1,5 @@
-use crate::{core::jwt::verification_jwt, AppError};
+use crate::error::AppError;
+use crate::jwt::verification_jwt;
 use axum::{extract::Request, middleware::Next, response::Response};
 
 pub async fn verification_header(mut request: Request, next: Next) -> Result<Response, AppError> {

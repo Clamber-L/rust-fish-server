@@ -1,0 +1,38 @@
+[package]
+name = "server"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+lib-core = { workspace = true }
+lib-utils = { workspace = true }
+lib-entity = { workspace = true }
+
+shuttle-axum = { workspace = true }
+shuttle-runtime = { workspace = true }
+
+# error handler
+anyhow = { workspace = true }
+thiserror = { workspace = true }
+
+# serialize and deserialize
+serde = { workspace = true }
+serde_json = { workspace = true }
+
+# web
+axum = { workspace = true }
+
+# orm
+sea-orm = { workspace = true }
+# ts-bind = "0.1.7"
+
+# log
+tracing = { workspace = true }
+
+# utils
+chrono = { workspace = true }
+derive_builder = { workspace = true }
+hmac = { workspace = true }
+jwt = { workspace = true }
+sha2 = { workspace = true }
+sonyflake = { workspace = true }

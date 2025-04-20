@@ -1,16 +1,16 @@
 pub mod database;
+mod error;
 pub mod jwt;
 pub mod middleware;
 
 use std::ops::Deref;
 
+use crate::error::AppError;
 use axum::extract::{FromRequest, Path, Query, Request};
 use axum::{Form, Json};
 pub use database::*;
+use lib_utils::result::HttpResult;
 use serde::de::DeserializeOwned;
-
-use crate::utils::result::HttpResult;
-use crate::AppError;
 
 pub type ApiResult<T> = Result<HttpResult<T>, AppError>;
 

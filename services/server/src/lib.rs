@@ -1,9 +1,5 @@
 mod api;
 mod app_state;
-mod core;
-mod entity;
-mod error;
-mod utils;
 
 use crate::api::fish_record::fish_record_router;
 use anyhow::Result;
@@ -11,6 +7,7 @@ use app_state::AppState;
 use axum::{routing::get, Router};
 use core::*;
 pub use error::*;
+use lib_core::mysql_pool;
 
 pub async fn init_router(mysql_url: &str) -> Result<Router> {
     // init mysql pool

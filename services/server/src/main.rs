@@ -1,5 +1,5 @@
 use axum::Router;
-use rust_fish_server::init_router;
+use server::init_router;
 use shuttle_runtime::SecretStore;
 
 #[shuttle_runtime::main]

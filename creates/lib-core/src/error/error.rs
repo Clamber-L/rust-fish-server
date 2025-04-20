@@ -1,12 +1,12 @@
 use std::num::ParseIntError;
 
-use crate::utils::ResMessage;
 use axum::extract::rejection::{FormRejection, PathRejection, QueryRejection};
 use axum::{
     extract::rejection::JsonRejection,
     http::{header, StatusCode},
     response::IntoResponse,
 };
+use lib_utils::ResMessage;
 use thiserror::Error;
 use tracing::error;
 
