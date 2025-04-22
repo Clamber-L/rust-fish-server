@@ -18,8 +18,12 @@ pub fn password_salt_hash(password: &str) -> (String, String) {
 }
 
 pub fn verify_password(password: &str, salt: &str, hash_password: &str) -> bool {
-    let hash =
-        argon2::hash_encoded(password.as_bytes(), salt.as_bytes(), &Config::default()).unwrap();
-    let matches = argon2::verify_encoded(&hash, hash_password.as_bytes()).unwrap();
+    let matches = argon2::verify_raw(
+        password.as_bytes(),
+        salt.as_bytes(),
+        hash_password.as_bytes(),
+        &Config::default(),
+    )
+    .unwrap();
     matches
 }
