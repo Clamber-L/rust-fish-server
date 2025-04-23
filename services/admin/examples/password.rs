@@ -1,9 +1,9 @@
-use lib_utils::password::*;
+use lib_utils::password::{password_salt_hash, verify_password};
 
 fn main() {
-    let hash = password_salt_hash("password");
-    println!("{:?}", hash);
+    let password = password_salt_hash("admin");
+    println!("{}", password);
 
-    let matchs = verify_password("password", hash.1.as_str(), hash.0.as_str());
-    println!("{:?}", matchs);
+    let matches = verify_password("admin", &password);
+    println!("{}", matches);
 }

@@ -1,29 +1,20 @@
-use argon2::Config;
-use rand::{rng, Rng};
+use argon2::{
+    password_hash::{rand_core::OsRng, PasswordHash, PasswordHasher, PasswordVerifier, SaltString},
+    Argon2,
+};
 
-pub fn password_salt_hash(password: &str) -> (String, String) {
-    const CHARSET: &[u8] = b"abcdefghijklmnopqrstuvwxyz0123456789";
-    let mut rng = rng();
-    let random_string: String = (0..CHARSET.len())
-        .map(|_| {
-            let idx = rng.gen_range(0..CHARSET.len());
-            CHARSET[idx] as char
-        })
-        .collect();
-
-    let password = password.as_bytes();
-    let salt = random_string.as_bytes();
-    let hash = argon2::hash_encoded(password, salt, &Config::default()).unwrap();
-    (hash, random_string)
+pub fn password_salt_hash(password: &str) -> String {
+    let salt = SaltString::generate(&mut OsRng);
+    let argon2 = Argon2::default();
+    argon2
+        .hash_password(password.as_bytes(), &salt)
+        .unwrap()
+        .to_string()
 }
 
-pub fn verify_password(password: &str, salt: &str, hash_password: &str) -> bool {
-    let matches = argon2::verify_raw(
-        password.as_bytes(),
-        salt.as_bytes(),
-        hash_password.as_bytes(),
-        &Config::default(),
-    )
-    .unwrap();
-    matches
+pub fn verify_password(password: &str, hash_password: &str) -> bool {
+    let parsed_hash = PasswordHash::new(hash_password).unwrap();
+    Argon2::default()
+        .verify_password(password.as_bytes(), &parsed_hash)
+        .is_ok()
 }
