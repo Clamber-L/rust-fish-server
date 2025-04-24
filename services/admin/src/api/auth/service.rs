@@ -27,3 +27,7 @@ pub async fn login(
         Ok(ResData::ok("123".to_string()))
     }
 }
+
+pub async fn user_info(State(state): State<AppState>) -> ApiResult<String> {
+    Ok(ResMessage::ok_with_message())
+}
