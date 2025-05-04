@@ -30,6 +30,14 @@ impl<T> HttpResult<T> {
         }
     }
 
+    pub fn error_with_token(message: &str) -> HttpResult<String> {
+        HttpResult {
+            code: 430,
+            message: message.to_owned(),
+            data: None,
+        }
+    }
+
     pub fn ok_with_message() -> HttpResult<String> {
         HttpResult {
             code: 200,

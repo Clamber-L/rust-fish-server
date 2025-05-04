@@ -2,6 +2,7 @@ mod api;
 mod app_state;
 
 use crate::api::fish_record::fish_record_router;
+use crate::api::user::user_routers;
 use anyhow::Result;
 use app_state::AppState;
 use axum::{routing::get, Router};
@@ -17,6 +18,7 @@ pub async fn init_router(mysql_url: &str) -> Result<Router> {
     let router = Router::new()
         .route("/", get(hello_world))
         .nest("/fish_record", fish_record_router())
+        .nest("/user", user_routers())
         .with_state(state);
     Ok(router)
 }

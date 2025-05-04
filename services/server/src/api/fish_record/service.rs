@@ -1,6 +1,8 @@
+use super::entity::FishRecordPageParam;
 use crate::app_state::AppState;
 use axum::extract::State;
 use chrono::Utc;
+use lib_core::jwt::JwtUser;
 use lib_core::{generate_snowflake_id, ApiResult, ExtractJson, ExtractQuery};
 use lib_entity::mysql::fish_record;
 use lib_entity::mysql::fish_record::Model;
@@ -9,8 +11,6 @@ use lib_utils::result::request_entity::PageResult;
 use lib_utils::{ResData, ResMessage};
 use sea_orm::{ActiveModelTrait, EntityTrait, PaginatorTrait, QueryOrder, Set};
 use serde::Deserialize;
-
-use super::entity::FishRecordPageParam;
 
 pub async fn fish_record(State(state): State<AppState>) -> ApiResult<Vec<Model>> {
     let connection = &state.mysql_client;
@@ -21,8 +21,10 @@ pub async fn fish_record(State(state): State<AppState>) -> ApiResult<Vec<Model>>
 
 pub async fn fish_record_by_page(
     State(state): State<AppState>,
+    user: JwtUser,
     ExtractQuery(param): ExtractQuery<FishRecordPageParam>,
 ) -> ApiResult<PageResult<Model>> {
+    println!("user={:?}, params={:?}", user, param);
     let paginate = FishRecord::find()
         .order_by_desc(fish_record::Column::Id)
         .paginate(&state.mysql_client, param.page_size);

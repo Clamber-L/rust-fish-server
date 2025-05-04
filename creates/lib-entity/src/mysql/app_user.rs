@@ -10,6 +10,8 @@ pub struct Model {
     #[sea_orm(primary_key, auto_increment = false)]
     #[serde(skip_deserializing)]
     pub id: String,
+    pub username: String,
+    pub phone: String,
     pub created_time: Option<DateTime>,
     pub updated_time: Option<DateTime>,
 }

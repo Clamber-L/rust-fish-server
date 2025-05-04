@@ -11,7 +11,6 @@ use axum::{Form, Json};
 pub use database::*;
 use lib_utils::result::HttpResult;
 use serde::de::DeserializeOwned;
-use tracing::info;
 
 pub type ApiResult<T> = Result<HttpResult<T>, AppError>;
 

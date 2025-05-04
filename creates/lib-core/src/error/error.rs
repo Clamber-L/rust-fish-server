@@ -1,5 +1,6 @@
 use std::num::ParseIntError;
 
+use crate::jwt::JwtUserBuilderError;
 use axum::extract::rejection::{FormRejection, PathRejection, QueryRejection};
 use axum::{
     extract::rejection::JsonRejection,
@@ -52,6 +53,9 @@ pub enum AppError {
 
     #[error("sonyflake error")]
     SonyflakeError(#[from] sonyflake::Error),
+
+    #[error("derive_builder error")]
+    JwtUserBuilderError(#[from] derive_builder::UninitializedFieldError),
 }
 
 impl IntoResponse for AppError {
@@ -63,7 +67,7 @@ impl IntoResponse for AppError {
             ),
             AppError::Unauthorized => (
                 StatusCode::UNAUTHORIZED,
-                ResMessage::error_with_message("UNAUTHORIZED"),
+                ResMessage::error_with_token("UNAUTHORIZED"),
             ),
             AppError::InternalServerError => (
                 StatusCode::INTERNAL_SERVER_ERROR,
@@ -113,6 +117,13 @@ impl IntoResponse for AppError {
             }
             AppError::SonyflakeError(sonyflake_error) => {
                 error!("sonyflake error:{:?}", sonyflake_error);
+                (
+                    StatusCode::OK,
+                    ResMessage::error_with_message("系统内部错误"),
+                )
+            }
+            AppError::JwtUserBuilderError(builder_error) => {
+                error!("jwt user error:{:?}", builder_error);
                 (
                     StatusCode::OK,
                     ResMessage::error_with_message("系统内部错误"),
