@@ -1,4 +1,5 @@
-
+.idea
 /target
+.vscode
 .shuttle*
 Secrets*.toml

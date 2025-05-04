@@ -4,7 +4,7 @@ use sea_orm::entity::prelude::*;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, PartialEq, DeriveEntityModel, Eq, Serialize, Deserialize)]
-#[sea_orm(table_name = "auth")]
+#[sea_orm(table_name = "sys_user")]
 #[serde(rename_all = "camelCase")]
 pub struct Model {
     #[sea_orm(primary_key, auto_increment = false)]
@@ -12,10 +12,10 @@ pub struct Model {
     pub id: String,
     pub created_time: Option<DateTime>,
     pub updated_time: Option<DateTime>,
-    pub username: Option<String>,
-    pub password: Option<String>,
+    pub username: String,
+    pub password: String,
     pub avatar: Option<String>,
-    pub phone: Option<String>,
+    pub phone: String,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]

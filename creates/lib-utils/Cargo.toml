@@ -8,3 +8,6 @@ axum = { workspace = true }
 serde = { workspace = true }
 sea-orm = { workspace = true }
 serde_json = { workspace = true }
+anyhow = { workspace = true }
+rand = { workspace = true }
+argon2 = { workspace = true }
