@@ -5,7 +5,7 @@ use lib_core::jwt::{generate_jwt, JwtUserBuilder};
 use lib_core::{ApiResult, ExtractJson};
 use lib_entity::mysql::app_user;
 use lib_entity::mysql::prelude::AppUser;
-use lib_utils::{ResData, ResMessage};
+use lib_utils::result::{error_result, HttpResult};
 use sea_orm::sea_query::Expr;
 use sea_orm::{EntityTrait, QueryFilter, QueryTrait};
 
@@ -21,8 +21,8 @@ pub async fn login(
     println!("result: {:?}", result);
     if let Some(user) = result {
         let token = generate_jwt(JwtUserBuilder::default().id(user.id).build().unwrap());
-        Ok(ResData::ok(token))
+        Ok(HttpResult::ok(token))
     } else {
-        Ok(ResMessage::error_with_message("Invalid user ID"))
+        Ok(error_result("Invalid user ID"))
     }
 }

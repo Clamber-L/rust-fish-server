@@ -1,13 +1,9 @@
 use std::num::ParseIntError;
 
-use crate::jwt::JwtUserBuilderError;
 use axum::extract::rejection::{FormRejection, PathRejection, QueryRejection};
-use axum::{
-    extract::rejection::JsonRejection,
-    http::{header, StatusCode},
-    response::IntoResponse,
-};
-use lib_utils::ResMessage;
+use axum::{extract::rejection::JsonRejection, http::StatusCode, response::IntoResponse};
+use lib_utils::json_response;
+use lib_utils::result::{error_result, HttpResult};
 use thiserror::Error;
 use tracing::error;
 
@@ -60,81 +56,62 @@ pub enum AppError {
 
 impl IntoResponse for AppError {
     fn into_response(self) -> axum::response::Response {
-        let (status, body) = match self {
-            AppError::NotFound => (
-                StatusCode::NOT_FOUND,
-                ResMessage::error_with_message("not found"),
-            ),
+        let (status, body): (StatusCode, HttpResult<()>) = match self {
+            AppError::NotFound => (StatusCode::NOT_FOUND, error_result("not found")),
             AppError::Unauthorized => (
                 StatusCode::UNAUTHORIZED,
-                ResMessage::error_with_token("UNAUTHORIZED"),
+                HttpResult::error_with_token("UNAUTHORIZED"),
             ),
             AppError::InternalServerError => (
                 StatusCode::INTERNAL_SERVER_ERROR,
-                ResMessage::error_with_message("Internal server error"),
+                error_result("Internal server error"),
             ),
-            AppError::ServiceError(error_str) => {
-                (StatusCode::OK, ResMessage::error_with_message(error_str))
-            }
+            AppError::ServiceError(error_str) => (StatusCode::OK, error_result(error_str)),
             AppError::DbError(sql_error) => {
                 error!("sql error:{:?}", sql_error);
-                (StatusCode::OK, ResMessage::error_with_message("查询失败"))
+                (StatusCode::OK, error_result("查询失败"))
             }
             // AppError::MongoError(mongo_error) => {
             //     error!("mongo error:{:?}", mongo_error);
-            //     (StatusCode::OK, ResMessage::error_with_message("查询失败"))
+            //     (StatusCode::OK, error_result("查询失败"))
             // }
             AppError::ParseError(parse_error) => {
                 error!("时间转换失败:{:?}", parse_error);
-                (StatusCode::OK, ResMessage::error_with_message("参数错误"))
+                (StatusCode::OK, error_result("参数错误"))
             }
             AppError::AxumError(axum_error) => {
                 error!("axum error:{:?}", axum_error);
-                (StatusCode::OK, ResMessage::error_with_message("参数错误"))
+                (StatusCode::OK, error_result("参数错误"))
             }
             AppError::QueryDeserializationError(query_error) => {
                 error!("query param error:{:?}", query_error.body_text());
-                (StatusCode::OK, ResMessage::error_with_message("参数错误"))
+                (StatusCode::OK, error_result("参数错误"))
             }
             AppError::PathDeserializationError(path_error) => {
                 error!("path error:{:?}", path_error.body_text());
-                (StatusCode::OK, ResMessage::error_with_message("参数错误"))
+                (StatusCode::OK, error_result("参数错误"))
             }
             AppError::JsonDeserializeError(json_error) => {
                 error!("json error:{:?}", json_error.body_text());
-                (StatusCode::OK, ResMessage::error_with_message("参数错误"))
+                (StatusCode::OK, error_result("参数错误"))
             }
             AppError::FormDeserializeError(form_error) => {
                 error!("form error:{:?}", form_error.body_text());
-                (StatusCode::OK, ResMessage::error_with_message("参数错误"))
+                (StatusCode::OK, error_result("参数错误"))
             }
             AppError::ParseIntError(parse_error) => {
                 error!("parse error:{:?}", parse_error);
-                (
-                    StatusCode::OK,
-                    ResMessage::error_with_message("系统内部错误"),
-                )
+                (StatusCode::OK, error_result("系统内部错误"))
             }
             AppError::SonyflakeError(sonyflake_error) => {
                 error!("sonyflake error:{:?}", sonyflake_error);
-                (
-                    StatusCode::OK,
-                    ResMessage::error_with_message("系统内部错误"),
-                )
+                (StatusCode::OK, error_result("系统内部错误"))
             }
             AppError::JwtUserBuilderError(builder_error) => {
                 error!("jwt user error:{:?}", builder_error);
-                (
-                    StatusCode::OK,
-                    ResMessage::error_with_message("系统内部错误"),
-                )
+                (StatusCode::OK, error_result("系统内部错误"))
             }
         };
-        let mut response = (status, serde_json::to_string(&body).unwrap()).into_response();
-        response.headers_mut().insert(
-            header::CONTENT_TYPE,
-            header::HeaderValue::from_static("application/json"),
-        );
-        response
+        json_response(status, &body)
     }
 }

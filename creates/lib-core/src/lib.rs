@@ -1,5 +1,5 @@
 pub mod database;
-mod error;
+pub mod error;
 pub mod jwt;
 pub mod middleware;
 

@@ -1,7 +1,6 @@
 use admin::init_router;
 use anyhow::Result;
-use axum::{routing::get, serve, Router};
-use lib_core::mysql_pool;
+use axum::serve;
 use tokio::net::TcpListener;
 use tracing::info;
 use tracing::metadata::LevelFilter;

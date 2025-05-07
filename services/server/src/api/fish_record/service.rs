@@ -8,7 +8,7 @@ use lib_entity::mysql::fish_record;
 use lib_entity::mysql::fish_record::Model;
 use lib_entity::mysql::prelude::FishRecord;
 use lib_utils::result::request_entity::PageResult;
-use lib_utils::{ResData, ResMessage};
+use lib_utils::result::HttpResult;
 use sea_orm::{ActiveModelTrait, EntityTrait, PaginatorTrait, QueryOrder, Set};
 use serde::Deserialize;
 
@@ -16,7 +16,7 @@ pub async fn fish_record(State(state): State<AppState>) -> ApiResult<Vec<Model>>
     let connection = &state.mysql_client;
 
     let result = FishRecord::find().all(connection).await?;
-    Ok(ResData::ok(result))
+    Ok(HttpResult::ok(result))
 }
 
 pub async fn fish_record_by_page(
@@ -37,7 +37,7 @@ pub async fn fish_record_by_page(
         items_and_pages_number,
         items,
     );
-    Ok(ResData::ok(page_result))
+    Ok(HttpResult::ok(page_result))
 }
 
 #[derive(Deserialize, Debug, Default)]
@@ -63,5 +63,5 @@ pub async fn inset_record(
     };
     record.insert(&state.mysql_client).await?;
 
-    Ok(ResMessage::ok_with_message())
+    Ok(HttpResult::ok_with_message())
 }

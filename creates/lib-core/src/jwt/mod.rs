@@ -1,5 +1,5 @@
 use anyhow::Result;
-use axum::extract::{FromRequest, FromRequestParts};
+use axum::extract::FromRequestParts;
 use axum::http::request::Parts;
 use derive_builder::Builder;
 use hmac::{Hmac, Mac};
