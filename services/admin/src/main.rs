@@ -11,7 +11,7 @@ use tracing_subscriber::{fmt::Layer, Layer as _};
 
 #[tokio::main]
 async fn main() -> Result<()> {
-    let layer = Layer::new().with_filter(LevelFilter::INFO);
+    let layer = Layer::new().with_filter(LevelFilter::TRACE);
     tracing_subscriber::registry().with(layer).init();
 
     let addr = format!("0.0.0.0:{}", 8100);
